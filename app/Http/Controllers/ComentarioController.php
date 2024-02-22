@@ -21,8 +21,7 @@ class ComentarioController extends Controller
      */
     public function create()
     {
-
-        return view('comentarios/comentarioCreate');
+        return view('comentarios.comentarioCreate');
     }
 
     /**
@@ -30,7 +29,15 @@ class ComentarioController extends Controller
      */
     public function store(Request $request)
     {
-        //guardar
+        // Validar
+        /*$request->validate([
+            'nombre' => 'required|max:255',
+            'correo' => ['required', 'email', 'max:255'],
+            'comentario' =>[ 'required', 'min:10'],
+            'ciudad' => 'required',
+        ]);*/
+
+        // Guardar
         $comentario = new Comentario();
         $comentario->nombre = $request->nombre;
         $comentario->correo = $request->correo;
@@ -38,7 +45,7 @@ class ComentarioController extends Controller
         $comentario->ciudad = $request->ciudad;
         $comentario->save();
 
-        //redireccionar
+        // Redireccionar
         return redirect()->route('comentario.index');
     }
 
@@ -55,7 +62,7 @@ class ComentarioController extends Controller
      */
     public function edit(Comentario $comentario)
     {
-        //
+        return view('comentarios.comentarioEdit', compact('comentario'));
     }
 
     /**
@@ -63,7 +70,20 @@ class ComentarioController extends Controller
      */
     public function update(Request $request, Comentario $comentario)
     {
-        //
+        /*$request->validate([
+            'nombre' => 'required|max:255',
+            'correo' => ['required', 'email', 'max:255'],
+            'comentario' =>[ 'required', 'min:10'],
+            'ciudad' => 'required',
+        ]);*/
+        
+        $comentario->nombre = $request->nombre;
+        $comentario->correo = $request->correo;
+        $comentario->comentario = $request->comentario;
+        $comentario->ciudad = $request->ciudad;
+        $comentario->save();
+
+        return redirect()->route('comentario.show', $comentario);
     }
 
     /**
@@ -71,6 +91,7 @@ class ComentarioController extends Controller
      */
     public function destroy(Comentario $comentario)
     {
-        //
+        $comentario->delete();
+        return redirect()->route('comentario.index');
     }
 }
